@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js GLB Loader - Rotation and Scale</title>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.130.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.130.1/examples/js/loaders/GLTFLoader.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script>
+    // Membuat scene, kamera, dan renderer untuk Three.js
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Memuat file model GLB
+    var loader = new THREE.GLTFLoader();
+    loader.load('model.glb', function (gltf) {
+      var model = gltf.scene;
+      scene.add(model);
+
+      // Menampilkan rotation dan scale model di konsol
+      console.log('Rotation:', model.rotation);
+      console.log('Scale:', model.scale);
+
+      // Set posisi kamera
+      camera.position.z = 5;
+
+      // Fungsi animasi untuk memutar model dan merender scene
+      var animate = function () {
+        requestAnimationFrame(animate);
+
+        // Rotasi objek untuk animasi
+        model.rotation.x += 0.01;
+        model.rotation.y += 0.01;
+
+        // Render scene dan kamera
+        renderer.render(scene, camera);
+      };
+
+      animate();
+    });
+
+    // Menangani resizing layar
+    window.addEventListener('resize', function () {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
